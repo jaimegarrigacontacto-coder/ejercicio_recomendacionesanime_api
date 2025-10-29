@@ -1,5 +1,4 @@
 import mysql.connector
-from user import User
 
 class DAOLogin:
     def __init__(self, host, user, password):

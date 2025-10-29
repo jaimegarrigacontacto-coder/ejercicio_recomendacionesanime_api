@@ -1,4 +1,4 @@
-from DAO import *
+from connection import *
 
 opcion = None
 
