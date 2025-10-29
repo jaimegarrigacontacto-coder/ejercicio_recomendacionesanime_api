@@ -6,7 +6,7 @@ host = "localhost"
 root = input("Introduce el usuario: ")
 password = input("Introduce la contraseña: ")
 
-myDAO = DAOLogin(host, root, password)
+myDB = Connection(host, root, password)
 
 while opcion != 0:
     print("\n1- Añadir anime\n2- Recomendaciones")

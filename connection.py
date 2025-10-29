@@ -1,6 +1,6 @@
 import mysql.connector
 
-class DAOLogin:
+class Connection:
     def __init__(self, host, user, password):
         self.setHost(host)
         self.setUser(user)
