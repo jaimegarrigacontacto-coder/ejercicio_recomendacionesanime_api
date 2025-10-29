@@ -1,7 +1,7 @@
 import mysql.connector
 from user import User
 
-class DAOCarreras:
+class DAOLogin:
     def __init__(self, host, user, password):
         self.setHost(host)
         self.setUser(user)
@@ -15,6 +15,9 @@ class DAOCarreras:
                 user=self.getUser(),
                 password=self.getPassword(),
                 database="login")
+        
+    def getDatabase(self):
+        return self.__database
         
     def setHost(self, host):
         self.__host = host
@@ -33,3 +36,9 @@ class DAOCarreras:
 
     def getPassword(self):
         return self.__password
+    
+    def setCursor(self):
+        self.__cursor = self.getDatabase().cursor()
+
+    def getCursor(self):
+        return self.__cursor
