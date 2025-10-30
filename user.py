@@ -1,5 +1,6 @@
 class User:
-    def __init__(self, username, password):
+    def __init__(self, username, password, iduser = None):
+        self.__iduser = iduser
         self.setUsername(username)
         self.setPassword(password)
     
@@ -8,3 +9,19 @@ class User:
 
     def setPassword(self, password):
         self.__password = password
+
+    def getUsername(self):
+        return self.__username
+    
+    def getPassword(self):
+        return self.__password
+    
+    def getId(self):
+        return self.__iduser
+    
+    def to_dict(self):
+        return {
+            'iduser': self.__iduser,
+            'username': self.__username,
+            'password': self.__password,
+        }
