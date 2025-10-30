@@ -58,6 +58,10 @@ while opcion != 0:
     else:
         print("Error. Opción no válida.")
         continue
-
-    if opcion == 0:
+    
+    if opcion == 1:
+        print("wip...")
+    elif opcion == 2:
+        print("wip...")
+    elif opcion == 0:
         print("Saliendo del programa...")
