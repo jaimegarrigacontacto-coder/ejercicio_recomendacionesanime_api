@@ -28,5 +28,29 @@ def add_user():
         "password": password,
     })
 
+@app.route("/login", methods=["POST"])
+def login_user():
+    data = request.get_json()
+    username = data['username']
+    password = data['password']
+    
+    try:
+        user = myDAO.obtenerPorUsername(username)
+        
+        if user is None:
+            return jsonify({"error": "Usuario no encontrado"}), 404
+        
+        if user.getPassword() == password:
+            return jsonify({
+                "success": True,
+                "message": "Login exitoso",
+                "user": user.to_dict()
+            }), 200
+        else:
+            return jsonify({"error": "Contraseña incorrecta"}), 401
+            
+    except Exception as e:
+        return jsonify({"error": str(e)}), 400
+
 if __name__ == "__main__":
     app.run(debug=True)

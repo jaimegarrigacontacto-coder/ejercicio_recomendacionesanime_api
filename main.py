@@ -23,7 +23,14 @@ while login != 0:
         password = input("Inserta password: ")
         datos = {'username': username, 'password': password}
         res = requests.post('http://localhost:5000/login', json=datos)
-        print(res.json())
+        
+        respuesta = res.json()
+        print(respuesta)
+        
+        if res.status_code == 200 and respuesta.get("success"):
+            usuario_actual = respuesta.get("user")
+            print(f"¡Bienvenido {usuario_actual['username']}!")
+            break  
 
     elif login == 2:
         nuevoUsername = input("Nuevo username: ")
@@ -37,20 +44,22 @@ while login != 0:
         try:
             res = requests.post('http://localhost:5000/register', json=datos)
             print(res.json())
-        except Exception as e: print(f"Error al registrarse. Nombre de usuario ya está en uso: {e}")
+        except Exception as e: 
+            print(f"Error al registrarse. Nombre de usuario ya está en uso: {e}")
 
     elif login == 0:
         opcion = 0
-    
+        break
 
-while opcion != 0:
-    print("1- Añadir ratings\n2- Ver recomendaciones")
-    opcion = input("\nSelecciona opción: ")
-    if opcion.isdigit():
-        opcion = int(opcion)
-    else:
-        print("Error. Opción no válida.")
-        continue
+if usuario_actual is not None:
+    while opcion != 0:
+        print("\n1- Añadir ratings\n2- Ver recomendaciones\n0- Salir")
+        opcion = input("\nSelecciona opción: ")
+        if opcion.isdigit():
+            opcion = int(opcion)
+        else:
+            print("Error. Opción no válida.")
+            continue
 
-    if opcion == 0:
-        print("Saliendo del programa...")
+        if opcion == 0:
+            print("Saliendo del programa...")

@@ -23,6 +23,16 @@ class DAOUser:
         fila = self.getCursor().fetchone()
         userConsulta = User(fila[1], fila[2], fila[0])
         return userConsulta
+    
+    def obtenerPorUsername(self, username):
+        sql = "SELECT * FROM user WHERE username = %s"
+        valores = (username,)
+        self.getCursor().execute(sql, valores)
+        fila = self.getCursor().fetchone()
+        if fila is None:
+            return None
+        userConsulta = User(fila[1], fila[2], fila[0])  # username, password, id
+        return userConsulta
 
     def setHost(self, host):
         self.__host = host
