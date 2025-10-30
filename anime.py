@@ -3,8 +3,14 @@ class Anime:
         self.setAnime(anime)
         self.setRating(rating)
     
-    def setUsername(self, anime):
+    def setAnime(self, anime):
         self.__anime = anime
 
-    def setPassword(self, rating):
+    def setRating(self, rating):
         self.__rating = rating
+
+    def getAnime(self):
+        return self.__anime
+    
+    def getRating(self):
+        return self.__rating
