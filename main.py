@@ -28,9 +28,8 @@ while login != 0:
         print(respuesta)
         
         if res.status_code == 200 and respuesta.get("success"):
-            usuario_actual = respuesta.get("user")
-            print(f"¡Bienvenido {usuario_actual['username']}!")
-            break  
+            print(f"¡Bienvenido/a!")
+            login = 0
 
     elif login == 2:
         nuevoUsername = input("Nuevo username: ")
@@ -51,15 +50,14 @@ while login != 0:
         opcion = 0
         break
 
-if usuario_actual is not None:
-    while opcion != 0:
-        print("\n1- Añadir ratings\n2- Ver recomendaciones\n0- Salir")
-        opcion = input("\nSelecciona opción: ")
-        if opcion.isdigit():
-            opcion = int(opcion)
-        else:
-            print("Error. Opción no válida.")
-            continue
+while opcion != 0:
+    print("\n1- Añadir ratings\n2- Ver recomendaciones\n0- Salir")
+    opcion = input("\nSelecciona opción: ")
+    if opcion.isdigit():
+        opcion = int(opcion)
+    else:
+        print("Error. Opción no válida.")
+        continue
 
-        if opcion == 0:
-            print("Saliendo del programa...")
+    if opcion == 0:
+        print("Saliendo del programa...")
