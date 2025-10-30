@@ -43,7 +43,7 @@ class DAOUser:
         return self.getCursor().rowcount
     
     def obtenerPorId(self, user):
-        sql = "SELECT * FROM carreras WHERE iduser = %s"
+        sql = "SELECT * FROM user WHERE iduser = %s"
         valores = (user.getId(),)
         self.getCursor().execute(sql, valores)
         fila = self.getCursor().fetchone()
