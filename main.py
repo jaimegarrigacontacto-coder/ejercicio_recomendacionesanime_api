@@ -33,8 +33,11 @@ while login != 0:
             "username": nuevoUsername,
             "password": nuevoPassword
         }
-        res = requests.post('http://localhost:5000/register', json=datos)
-        print(res.json())
+
+        try:
+            res = requests.post('http://localhost:5000/register', json=datos)
+            print(res.json())
+        except Exception as e: print(f"Error al registrarse. Nombre de usuario ya está en uso: {e}")
 
     elif login == 0:
         opcion = 0
