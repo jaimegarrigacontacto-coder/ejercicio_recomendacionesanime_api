@@ -31,7 +31,7 @@ class DAOUser:
         fila = self.getCursor().fetchone()
         if fila is None:
             return None
-        userConsulta = User(fila[1], fila[2], fila[0])  # username, password, id
+        userConsulta = User(fila[1], fila[2], fila[0])
         return userConsulta
 
     def setHost(self, host):
