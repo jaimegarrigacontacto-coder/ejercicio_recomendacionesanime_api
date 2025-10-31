@@ -56,7 +56,7 @@ while login != 0:
 user_ratings = {}
 
 while opcion != 0:
-    print("\n1- Añadir ratings\n2- Ver recomendaciones\n0- Salir")
+    print("\n1- Añadir ratings\n2- Ver recomendaciones\n3- Entrenar modelo\n0- Salir")
     opcion = input("\nSelecciona opción: ")
     if opcion.isdigit():
         opcion = int(opcion)
@@ -97,6 +97,24 @@ while opcion != 0:
                 print(f"{i}. {anime}: {score:.2f}")
         else:
             print(f"Error: {res.json()}")
+
+    elif opcion == 3:
+        print("\n--- Entrenar Modelo ---")
+        print("Reentrenando el modelo de recomendación... (Esto puede tardar varios minutos)")
+        
+        try:
+            res = session.post('http://localhost:5000/retrain')
+            
+            if res.status_code == 200:
+                respuesta = res.json()
+                print(f"¡Modelo reentrenado exitosamente!")
+                print(f"Tamaño de la nueva matriz: {respuesta.get('matrix_size')}")
+            else:
+                error_msg = res.json().get('error', 'Error desconocido')
+                print(f"Error al reentrenar el modelo: {error_msg}")
+                
+        except Exception as e:
+            print(f"Error de conexión: {e}")
 
     elif opcion == 0:
         print("Saliendo del programa...")
