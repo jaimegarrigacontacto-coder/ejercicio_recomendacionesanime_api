@@ -1,6 +1,12 @@
 from flask import Flask, jsonify, request
 from DAO_user import *
 import pandas as pd
+from conexion import iniciar_conexion
+import pickle
+import os
+
+corr_matrix_path = "C:/Users/Tarda/Documents/datasets/corrMatrix.pkl"
+FILE_PATH = "C:/Users/Tarda/Documents/datasets/"
 
 app = Flask(__name__)
 app.json.sort_keys = False
@@ -78,36 +84,54 @@ def get_recommendations():
         return jsonify({"error": str(e)}), 400
 
 if __name__ == "__main__":
-    from conexion import iniciar_conexion
-
     print("Inicializando servidor")
     myDAO = iniciar_conexion("localhost", "root", "123456")
 
     try:
-        ratings = pd.read_csv("C:/Users/jaimi/Desktop/Datos/rating.csv")
-        anime = pd.read_csv("C:/Users/jaimi/Desktop/Datos/anime.csv")
-        print("Archivos CSV cargados")
+        if os.path.exists(corr_matrix_path):
+            print("Cargando matrix de correlación ya existente...")
+            with open(corr_matrix_path, "rb") as f:
+                corrMatrix = pickle.load(f)
+            print("¡Se ha cargado correctamente!")
+            print(f"Tamaño de la matriz: {corrMatrix.shape}")
 
-        print("Aplicando filtros...")
-        anime = anime[(anime.type == 'TV') | (anime.type == 'ONA')]
-        anime = anime[~anime['genre'].str.contains('Hentai', case=False, na=False)]
-        ratings = ratings[ratings.rating != -1]
+        else:
+            print("Matrix de correlación no encontrada, entrenando modelo... (Esto puede tardar varios minutos.)")
 
-        print("Creando tabla pivot...")
-        merged = pd.merge(ratings, anime[['anime_id', 'name']], on='anime_id', how='inner')
-        userRatings = merged.pivot_table(index='user_id', columns='name', values='rating')
+            # Load your data
+            ratings = pd.read_csv(f"{FILE_PATH}rating.csv")
+            anime = pd.read_csv(f"{FILE_PATH}anime.csv")
+            print("Archivos CSV cargados")
 
-        print("Calculando matriz de correlación...")
-        min_ratings = 30
-        valid_users = userRatings.count(axis=1) >= min_ratings
-        corrMatrix = userRatings[valid_users].corr(method='pearson', min_periods=500)
+            # Apply filters
+            print("Aplicando filtros...")
+            anime = anime[(anime.type == 'TV') | (anime.type == 'ONA')]
+            anime = anime[~anime['genre'].str.contains('Hentai', case=False, na=False)]
+            ratings = ratings[ratings.rating != -1]
 
-        print("Matriz de correlación cargada")
-        print(f"Tamaño de la matriz: {corrMatrix.shape}")
+            # Merge and pivot
+            print("Creando tabla pivot...")
+            merged = pd.merge(ratings, anime[['anime_id', 'name']], on='anime_id', how='inner')
+            userRatings = merged.pivot_table(index='user_id', columns='name', values='rating')
+
+            # Compute correlation matrix
+            print("Calculando matriz de correlación...")
+            min_ratings = 30
+            valid_users = userRatings.count(axis=1) >= min_ratings
+            corrMatrix = userRatings[valid_users].corr(method='pearson', min_periods=500)
+
+            print("Matriz de correlación calculada")
+            print(f"Tamaño de la matriz: {corrMatrix.shape}")
+
+            # Save it for next time
+            with open(corr_matrix_path, "wb") as f:
+                pickle.dump(corrMatrix, f)
+
+            print("Correlation matrix saved successfully!")
 
     except Exception as e:
         print(f"Error cargando datos: {e}")
         corrMatrix = None
 
-    print("Servidor operativo!")
+    print("¡Servidor operativo!")
     app.run(debug=True, use_reloader=False)
