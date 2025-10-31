@@ -5,8 +5,8 @@ from conexion import iniciar_conexion
 import pickle
 import os
 
-corr_matrix_path = "C:/Users/Tarda/Documents/datasets/corrMatrix.pkl"
 FILE_PATH = "C:/Users/Tarda/Documents/datasets/"
+corr_matrix_path = f"{FILE_PATH}corrMatrix.pkl"
 
 app = Flask(__name__)
 app.json.sort_keys = False
