@@ -127,7 +127,7 @@ if __name__ == "__main__":
             with open(corr_matrix_path, "wb") as f:
                 pickle.dump(corrMatrix, f)
 
-            print("Correlation matrix saved successfully!")
+            print("¡Matrix de correlación guardada correctamente!")
 
     except Exception as e:
         print(f"Error cargando datos: {e}")
