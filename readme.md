@@ -1,0 +1,2 @@
+- Cambiar ruta de los archivos csv manualmente editando el codigo
+- El modelo se guarda en el mismo directorio que los archivos csv
