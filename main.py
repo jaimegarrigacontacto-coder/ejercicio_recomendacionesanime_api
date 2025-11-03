@@ -50,13 +50,11 @@ while login != 0:
 
     elif login == 0:
         opcion = 0
-        break
-
 
 user_ratings = {}
 
 while opcion != 0:
-    print("\n1- Añadir ratings\n2- Ver recomendaciones\n3- Entrenar modelo\n0- Salir")
+    print("\n1- Añadir ratings\n2- Ver recomendaciones\n3- Entrenar modelo\n4- Testear modelo\n0- Salir")
     opcion = input("\nSelecciona opción: ")
     if opcion.isdigit():
         opcion = int(opcion)
@@ -115,6 +113,31 @@ while opcion != 0:
                 
         except Exception as e:
             print(f"Error de conexión: {e}")
+
+    elif opcion == 4:
+        print("\n--- Testear Modelo ---")
+        print("Generando recomendaciones con datos de prueba...")
+        
+        test_ratings = {
+            "Hunter x Hunter (2011)": 10.0,
+            "School Days": 1.0
+        }
+        
+        print(f"Datos de prueba: {test_ratings}")
+        print("Generando recomendaciones!")
+        
+        datos = {'ratings': test_ratings}
+        res = session.post('http://localhost:5000/recommend', json=datos)
+        
+        if res.status_code == 200:
+            respuesta = res.json()
+            recommendations = respuesta.get('recommendations', {})
+            
+            print("\nRecomendaciones del test: ")
+            for i, (anime, score) in enumerate(recommendations.items(), 1):
+                print(f"{i}. {anime}: {score:.2f}")
+        else:
+            print(f"Error: {res.json()}")
 
     elif opcion == 0:
         print("Saliendo del programa...")
