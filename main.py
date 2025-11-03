@@ -46,7 +46,7 @@ while login != 0:
             res = session.post('http://localhost:5000/register', json=datos)
             print(res.json())
         except Exception as e: 
-            print(f"Error al registrarse: {e}")
+            print(f"Error al registrarse: {e}. Usuario ya existente.")
 
     elif login == 0:
         opcion = 0

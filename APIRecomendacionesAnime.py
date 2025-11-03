@@ -4,8 +4,9 @@ import pandas as pd
 from conexion import iniciar_conexion
 import pickle
 import os
+from model import *
 
-FILE_PATH = "C:/Users/jaimi/Desktop/dataset/"
+FILE_PATH = "C:/Users/Tarda/Documents/datasets/"
 corr_matrix_path = f"{FILE_PATH}corrMatrix.pkl"
 
 app = Flask(__name__)
@@ -57,6 +58,7 @@ def login_user():
 
 @app.route("/recommend", methods=["POST"])
 def get_recommendations():
+    global corrMatrix
     try:
         data = request.get_json()
         user_ratings = data['ratings']
@@ -88,38 +90,7 @@ def retrain_model():
     global corrMatrix
     try:
         print("Iniciando reentrenamiento del modelo...")
-        
-        # Load your data
-        ratings = pd.read_csv(f"{FILE_PATH}rating.csv")
-        anime = pd.read_csv(f"{FILE_PATH}anime.csv")
-        print("Archivos CSV cargados")
-
-        # Apply filters
-        print("Aplicando filtros...")
-        anime = anime[(anime.type == 'TV') | (anime.type == 'ONA')]
-        anime = anime[~anime['genre'].str.contains('Hentai', case=False, na=False)]
-        ratings = ratings[ratings.rating != -1]
-
-        # Merge and pivot
-        print("Creando tabla pivot...")
-        merged = pd.merge(ratings, anime[['anime_id', 'name']], on='anime_id', how='inner')
-        userRatings = merged.pivot_table(index='user_id', columns='name', values='rating')
-
-        # Compute correlation matrix
-        print("Calculando matriz de correlación...")
-        min_ratings = 30
-        valid_users = userRatings.count(axis=1) >= min_ratings
-        corrMatrix = userRatings[valid_users].corr(method='pearson', min_periods=500)
-
-        print("Matriz de correlación calculada")
-        print(f"Tamaño de la matriz: {corrMatrix.shape}")
-
-        # Save it for next time
-        with open(corr_matrix_path, "wb") as f:
-            pickle.dump(corrMatrix, f)
-
-        print("¡Matrix de correlación guardada correctamente!")
-
+        corrMatrix = trainModel(FILE_PATH, corr_matrix_path)
         return jsonify({
             "success": True,
             "message": "Modelo reentrenado exitosamente",
@@ -143,37 +114,7 @@ if __name__ == "__main__":
 
         else:
             print("Matrix de correlación no encontrada, entrenando modelo... (Esto puede tardar varios minutos.)")
-
-            # Load your data
-            ratings = pd.read_csv(f"{FILE_PATH}rating.csv")
-            anime = pd.read_csv(f"{FILE_PATH}anime.csv")
-            print("Archivos CSV cargados")
-
-            # Apply filters
-            print("Aplicando filtros...")
-            anime = anime[(anime.type == 'TV') | (anime.type == 'ONA')]
-            anime = anime[~anime['genre'].str.contains('Hentai', case=False, na=False)]
-            ratings = ratings[ratings.rating != -1]
-
-            # Merge and pivot
-            print("Creando tabla pivot...")
-            merged = pd.merge(ratings, anime[['anime_id', 'name']], on='anime_id', how='inner')
-            userRatings = merged.pivot_table(index='user_id', columns='name', values='rating')
-
-            # Compute correlation matrix
-            print("Calculando matriz de correlación...")
-            min_ratings = 30
-            valid_users = userRatings.count(axis=1) >= min_ratings
-            corrMatrix = userRatings[valid_users].corr(method='pearson', min_periods=500)
-
-            print("Matriz de correlación calculada")
-            print(f"Tamaño de la matriz: {corrMatrix.shape}")
-
-            # Save it for next time
-            with open(corr_matrix_path, "wb") as f:
-                pickle.dump(corrMatrix, f)
-
-            print("¡Matrix de correlación guardada correctamente!")
+            corrMatrix = trainModel(FILE_PATH, corr_matrix_path)
 
     except Exception as e:
         print(f"Error cargando datos: {e}")
