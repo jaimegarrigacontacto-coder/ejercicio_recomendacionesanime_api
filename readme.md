@@ -1,6 +1,8 @@
 Instrucciones para ejecutar recomendacionesanime_api
 
-Primero iniciar el servidor (APIRecomendacionesAnime)
+Primero crear una carpeta con los dataset de animes. Copiar y pegar la ruta en el servidor. Aqui se generará la matriz en caso de no existir.
+Segundo importa el archivo sql en tu workbench para tener lista tu tabla users.
+Tercero iniciar el servidor (APIRecomendacionesAnime) y luego el cliente (main).
 
 Para el correcto funcionamiento del servidor importar los siguientes módulos en caso que no se tengan.
 
@@ -12,7 +14,7 @@ Para el correcto funcionamiento del servidor importar los siguientes módulos en
 
 El servidor puede tardar en iniciarse unos 4 minutos si no existe una matriz de correlaciones en la ruta especificada. En caso de que no exista, crea una. El servidor se aloja en 127.0.0.1:5000 por defecto.
 
-El siguiente paso es iniciar el cliente. Importa el archivo sql en tu workbench para tener lista tu tabla users. Una vez el cliente está abierto identificate con el usuario y contraseña de tu BBDD. Aquí puedes crear usuarios nuevos o entrar con un usuario ya registrado en tu BBDD.
+Una vez el cliente está abierto identificate con el usuario y contraseña de tu BBDD. Aquí puedes crear usuarios nuevos o entrar con un usuario ya registrado en tu BBDD.
 
 El programa tiene 4 funciones:
 1- Añadir ratings: añade 1 o más animes y ratings para preparar tus recomendaciones.
