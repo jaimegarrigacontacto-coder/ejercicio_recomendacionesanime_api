@@ -8,7 +8,12 @@ session = requests.Session()
 host = "localhost"
 root = input("Introduce el usuario: ")
 password = input("Introduce la contraseña: ")
-iniciar_conexion(host, root, password)
+
+res = session.post('http://localhost:5000/bbdd', json={
+    "host": host,
+    "root": root,
+    "password": password
+})
 
 while login != 0:
     print("\n1- Iniciar sesión\n2- Registrarse\n0- Salir")

@@ -6,7 +6,7 @@ import pickle
 import os
 from model import *
 
-FILE_PATH = "C:/Users/jaimi/Desktop/dataset/"
+FILE_PATH = "C:/Users/Tarda/Documents/datasets/"
 corr_matrix_path = f"{FILE_PATH}corrMatrix.pkl"
 
 app = Flask(__name__)
@@ -18,6 +18,16 @@ corrMatrix = None
 @app.route("/")
 def hola_mundo():
     return "Hola Mundo"
+
+@app.route("/bbdd", methods=["POST"])
+def connect_bbdd():
+    global myDAO
+    data = request.get_json()
+    host = data.get("host")
+    root = data["root"]
+    password = data["password"]
+    
+    myDAO = iniciar_conexion(host, root, password)
 
 @app.route("/register", methods=["POST"])
 def add_user():
@@ -101,8 +111,6 @@ def retrain_model():
         return jsonify({"error": str(e)}), 400
 
 if __name__ == "__main__":
-    print("Inicializando servidor")
-    myDAO = iniciar_conexion("localhost", "root", "123456")
 
     try:
         if os.path.exists(corr_matrix_path):
