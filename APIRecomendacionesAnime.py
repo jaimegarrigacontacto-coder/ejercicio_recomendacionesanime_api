@@ -6,7 +6,7 @@ import pickle
 import os
 from model import *
 
-FILE_PATH = "C:/Users/Tarda/Documents/datasets/"
+FILE_PATH = "C:/Users/jaimi/Desktop/dataset/"
 corr_matrix_path = f"{FILE_PATH}corrMatrix.pkl"
 
 app = Flask(__name__)
