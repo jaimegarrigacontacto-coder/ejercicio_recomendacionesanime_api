@@ -1,4 +1,4 @@
-from DAO_user import DAOUser
+from Frontend.DAO_user import DAOUser
 
 myDAO = None
 

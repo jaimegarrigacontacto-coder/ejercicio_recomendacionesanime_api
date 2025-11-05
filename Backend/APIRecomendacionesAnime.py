@@ -1,5 +1,7 @@
+import sys, os
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from flask import Flask, jsonify, request
-from DAO_user import *
+from Frontend.DAO_user import *
 import pandas as pd
 from conexion import iniciar_conexion
 import pickle

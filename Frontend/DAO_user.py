@@ -1,5 +1,5 @@
 import mysql.connector
-from user import User
+from Frontend.user import User
 
 class DAOUser:
     def __init__(self, host, user, password):
