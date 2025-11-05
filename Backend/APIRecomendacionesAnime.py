@@ -7,6 +7,7 @@ from conexion import iniciar_conexion
 import pickle
 import os
 from model import *
+from recomendador import *
 
 FILE_PATH = "C:/Users/Tarda/Documents/datasets/"
 corr_matrix_path = f"{FILE_PATH}corrMatrix.pkl"
@@ -75,23 +76,12 @@ def get_recommendations():
         data = request.get_json()
         user_ratings = data['ratings']
         
-        myRatings = pd.Series(user_ratings)
-        simCandidates = pd.Series()
-        
-        for anime_name, rating in myRatings.items():
-            if anime_name in corrMatrix.columns:
-                sims = corrMatrix[anime_name].dropna()
-                sims = sims.map(lambda x: x * rating)
-                simCandidates = pd.concat([simCandidates, sims])
-        
-        simCandidates = simCandidates.groupby(simCandidates.index).sum()
-        simCandidates.sort_values(inplace=True, ascending=False)
-        filteredSims = simCandidates.drop(myRatings.index, errors='ignore')
-        recommendations = filteredSims.head(20).to_dict()
+        recomendadorAnimes = Recomendador(corrMatrix)
+        recommendaciones = recomendadorAnimes.recomendar(user_ratings)
         
         return jsonify({
             "success": True,
-            "recommendations": recommendations
+            "recommendations": recommendaciones
         }), 200
         
     except Exception as e:
